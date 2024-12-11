@@ -9,16 +9,24 @@ import Login from "./routes/login";
 import CreateAccount from "./routes/create-account";
 
 // libs
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, styled } from "styled-components";
 import reset from "styled-reset";
 
 // components
 import LoadingScreen from "./components/loading-screen";
 
+//firebase
+import { auth } from "./firebase";
+import ProtectedRoute from "./components/protected-route";
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "",
@@ -52,11 +60,17 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
+const Wrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+`;
+
 function App() {
   const [isLoading, setLoading] = useState(true);
 
   const init = async () => {
-    // wait for firebase
+    await auth.authStateReady();
     setLoading(false);
   };
 
@@ -66,8 +80,10 @@ function App() {
 
   return (
     <>
-      <GlobalStyles />
-      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
+      <Wrapper>
+        <GlobalStyles />
+        {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
+      </Wrapper>
     </>
   );
 }
