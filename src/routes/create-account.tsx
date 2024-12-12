@@ -13,6 +13,8 @@ import {
   Wrapper,
 } from "../components/auth-components";
 
+import GithubButton from "../components/github-btn";
+
 export default function CreateAccount() {
   const [isLoading, setLoading] = useState(false);
   const [name, setName] = useState("");
@@ -37,6 +39,7 @@ export default function CreateAccount() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+
     if(isLoading || name === "" || email === "" || password === "") return;
     try {
       setLoading(true);
@@ -58,6 +61,7 @@ export default function CreateAccount() {
       setLoading(false);
     }
   };
+
   return (
     <Wrapper>
       <Title>Join 𝕏</Title>
@@ -95,6 +99,7 @@ export default function CreateAccount() {
       <Switcher>
         Already have an account? <Link to="/login">Log in &rarr;</Link>
       </Switcher>
+      <GithubButton />
     </Wrapper>
   );
 }
